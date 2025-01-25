@@ -2,7 +2,7 @@ import { Optional } from "../common";
 import { Book } from "./book";
 import { Librarian } from "./librarian";
 import { Member } from "./member";
-import {LibraryError} from "./errors";
+import {LibraryError, MemberError} from "./errors";
 
 export abstract class Library {
   members: Member[];
@@ -27,6 +27,8 @@ export abstract class Library {
 
   abstract registerMember(member: Member): void;
 
+  abstract getAvailableBooks(): Book[];
+
   protected registerLibrarian(librarian: Librarian) {
     if (this.librarians.includes(librarian)) throw new LibraryError("failed to register member. member is already a librarian");
     librarian.joinLibrary(this);
@@ -38,5 +40,11 @@ export abstract class Library {
     this.members.push(nonLibrarian);
   }
 
-  abstract getAvailableBooks(): Book[];
+  lendBook(book: Book, member: Member): void {
+    const indexOfExistingMember = this.members.findIndex(m => m === member);
+    if (indexOfExistingMember === -1) throw new MemberError("can not lend book. member is not a member of the library");
+
+    const existingMember = this.members[indexOfExistingMember];
+    existingMember.borrowBook(book);
+  }
 }
