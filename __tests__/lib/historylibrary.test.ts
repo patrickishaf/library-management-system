@@ -3,6 +3,7 @@ import HistoryLibrary from "../../src/lib/historylibrary";
 import { v4 as uuid } from "uuid";
 import { Member } from "../../src/lib/member";
 import { Librarian } from "../../src/lib/librarian";
+import { BookAdditionError } from "../../src/lib/errors";
 
 describe("HistoryLibrary", () => {
   let books: Book[];
@@ -10,13 +11,13 @@ describe("HistoryLibrary", () => {
 
   beforeEach(() => {
     books = [
-      {title: "Title 0", author: "Author 0", isbn: uuid(), isAvailable: true },
-      {title: "Title 1", author: "Author 1", isbn: uuid(), isAvailable: true },
-      {title: "Title 2", author: "Author 2", isbn: uuid(), isAvailable: true },
-      {title: "Title 3", author: "Author 3", isbn: uuid(), isAvailable: true },
-      {title: "Title 4", author: "Author 4", isbn: uuid(), isAvailable: true },
-      {title: "Title 5", author: "Author 5", isbn: uuid(), isAvailable: true },
-      {title: "Title 6", author: "Author 6", isbn: uuid(), isAvailable: true },
+      {title: "Title 0", author: "Author", isbn: uuid(), isAvailable: true },
+      {title: "Title 1", author: "Author", isbn: uuid(), isAvailable: true },
+      {title: "Title 2", author: "Author", isbn: uuid(), isAvailable: true },
+      {title: "Title 3", author: "Author", isbn: uuid(), isAvailable: true },
+      {title: "Title 4", author: "Author", isbn: uuid(), isAvailable: true },
+      {title: "Title 5", author: "Author", isbn: uuid(), isAvailable: true },
+      {title: "Title 6", author: "Author", isbn: uuid(), isAvailable: true },
     ].map((b) => new Book(b.title, b.author, b.isbn, b.isAvailable));
     members = [
       new Librarian(1, "Librarian Name 1", []),
@@ -51,8 +52,22 @@ describe("HistoryLibrary", () => {
   });
 
   describe("addBook", () => {
-    it("adds a book if library is open", () => {});
-    it("does not borrow a book if it the library is closed", () => {});
-    it("does not borrow a book if it is unavailable", () => {});
+    it("adds a book if library is open", () => {
+      const lib = HistoryLibrary.createLibrary(books, members);
+      lib.open();
+      const isbn = uuid();
+      lib.addBook(new Book("Added Title 1", "Author", isbn, true));
+      expect(lib.size).toBe(books.length + 1);
+    });
+
+    it("does not add a book if it the library is closed", () => {
+      const lib = HistoryLibrary.createLibrary(books, members);
+      lib.close();
+      const isbn = uuid();
+      const func = () => {
+        lib.addBook(new Book("Added Title 2", "Author", isbn, true));
+      }
+      expect(func).toThrow(BookAdditionError);
+    });
   });
 });

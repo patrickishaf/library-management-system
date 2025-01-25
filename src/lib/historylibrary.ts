@@ -1,5 +1,6 @@
 import { Optional } from "../common";
 import { Book } from "./book";
+import { BookAdditionError } from "./errors";
 import { Librarian } from "./librarian";
 import { Library } from "./library";
 import { Member } from "./member";
@@ -9,13 +10,17 @@ export default class HistoryLibrary extends Library {
 
   constructor(books: Book[], members: Member[], librarians: Librarian[]) {
     super(members, librarians);
-    this.books = books;
+    this.books = [...books];
   }
 
   static createLibrary(books: Book[], members: Member[]): HistoryLibrary {
     const librarians = members.filter(m => m instanceof Librarian);
     const normalMembers = members.filter(m => !(m instanceof Librarian));
     return new HistoryLibrary(books, normalMembers, librarians);
+  }
+  
+  public get size() : number {
+    return this.books.length;
   }
 
   open(): void {
@@ -25,12 +30,17 @@ export default class HistoryLibrary extends Library {
   }
 
   close(): void {
-    if (this.isOpen) 
+    if (this.isOpen) {
       this.isOpen = false;
+    }
   }
 
   addBook(book: Book): void {
-    throw new Error("Method not implemented.");
+    if (this.isOpen) {
+      this.books.push(book);
+    } else {
+      throw new BookAdditionError("can not add new book. library closed");
+    }
   }
 
   removeBook(book: Book): void {
