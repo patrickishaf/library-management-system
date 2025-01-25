@@ -113,4 +113,38 @@ describe("HistoryLibrary", () => {
       expect(func).toThrow(LibraryError);
     });
   });
+
+  describe("findBook", () => {
+    let isbn1: string;
+    let isbn2: string;
+    let books: Book[];
+    let members: Member[];
+    let lib: HistoryLibrary;
+
+    beforeEach(() => {
+      isbn1 = uuid();
+      isbn2 = uuid();
+      books = [
+        {title: "Title 0", author: "Author", isbn: isbn1, isAvailable: true },
+        {title: "Title 1", author: "Author", isbn: isbn2, isAvailable: true },
+      ].map((b) => new Book(b.title, b.author, b.isbn, b.isAvailable));
+      members = [
+        new Librarian(1, "Librarian Name 1", []),
+        new Member(2, "Member Name 2", []),
+      ];
+      lib = HistoryLibrary.createLibrary(books, members);
+    });
+
+    it("returns a book if it exists", () => {
+      const result1 = lib.findBook(isbn1);
+      const result2 = lib.findBook(isbn2);
+      expect(result1).toBeDefined();
+      expect(result2).toBeDefined();
+    });
+    
+    it("returns undefined if the book does not exist", () => {
+      const result = lib.findBook("unknown_isbn");
+      expect(result).toBeUndefined();
+    });
+  });
 });

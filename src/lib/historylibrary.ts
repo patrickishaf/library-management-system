@@ -51,7 +51,7 @@ export default class HistoryLibrary extends Library {
   }
 
   findBook(isbn: string): Optional<Book> {
-    throw new Error("Method not implemented.");
+    return this.books.find(b => b.isbn === isbn);
   }
 
   registerMember(member: Member): void {
