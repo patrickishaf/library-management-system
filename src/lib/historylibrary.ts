@@ -5,10 +5,10 @@ import { Librarian } from "./librarian";
 import { Library } from "./library";
 import { Member } from "./member";
 
-export default class HistoryLibrary extends Library {
+export class HistoryLibrary extends Library {
   books: Book[];
 
-  constructor(books: Book[], members: Member[], librarians: Librarian[]) {
+  private constructor(books: Book[], members: Member[], librarians: Librarian[]) {
     super(members, librarians);
     this.books = [...books];
   }
