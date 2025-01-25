@@ -5,6 +5,7 @@ import { Optional } from "./util";
 type NodeEnv = "development" | "production" | "test";
 
 export interface AppConfig {
+  port: string;
   nodeEnv: NodeEnv;
   dbUser: string;
   dbName: string;
@@ -25,6 +26,7 @@ export const loadConfigFromNodeEnv = () => {
 export const getConfig = () => {
   loadConfigFromNodeEnv();
   const config: AppConfig = {
+    port: process.env.PORT ?? "3000",
     nodeEnv: (process.env.NODE_ENV ?? "production") as NodeEnv,
     dbHost: process.env.DB_HOST!,
     dbName: process.env.dbName!,

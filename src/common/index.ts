@@ -1,9 +1,8 @@
 import { getConfig } from "./appconfig";
 
 export * from "./appconfig";
-export * from "./util";
+export * from "./response";
 export * from "./logger";
+export * from "./util";
 
-const config = getConfig();
-
-export default config;
+export const config = getConfig();
