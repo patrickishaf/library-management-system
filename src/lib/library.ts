@@ -6,10 +6,12 @@ import { Member } from "./member";
 export abstract class Library {
   members: Member[];
   librarians: Librarian[];
+  isOpen: boolean;
 
-  constructor(members: Member[], librarians: Librarian[]) {
+  constructor(members: Member[], librarians: Librarian[], isOpen: boolean = false) {
     this.members = members;
     this.librarians = librarians;
+    this.isOpen = false;
   }
 
   abstract open(): void

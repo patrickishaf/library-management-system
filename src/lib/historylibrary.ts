@@ -4,7 +4,7 @@ import { Librarian } from "./librarian";
 import { Library } from "./library";
 import { Member } from "./member";
 
-export class HistoryLibrary extends Library {
+export default class HistoryLibrary extends Library {
   books: Book[];
 
   constructor(books: Book[], members: Member[], librarians: Librarian[]) {
@@ -12,10 +12,21 @@ export class HistoryLibrary extends Library {
     this.books = books;
   }
 
+  static createLibrary(books: Book[], members: Member[]): HistoryLibrary {
+    const librarians = members.filter(m => m instanceof Librarian);
+    const normalMembers = members.filter(m => !(m instanceof Librarian));
+    return new HistoryLibrary(books, normalMembers, librarians);
+  }
+
   open(): void {
+    if (!this.isOpen) {
+      this.isOpen = true;
+    }
   }
 
   close(): void {
+    if (this.isOpen) 
+      this.isOpen = false;
   }
 
   addBook(book: Book): void {
