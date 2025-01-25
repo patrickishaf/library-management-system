@@ -23,6 +23,10 @@ export default class HistoryLibrary extends Library {
     return this.books.length;
   }
 
+  public get totalMembers(): number {
+    return this.members.length + this.librarians.length;
+  }
+
   open(): void {
     if (!this.isOpen) {
       this.isOpen = true;
@@ -55,7 +59,21 @@ export default class HistoryLibrary extends Library {
   }
 
   registerMember(member: Member): void {
-    throw new Error("Method not implemented.");
+    if (member instanceof Librarian) {
+      this.registerLibrarian(member);
+    } else {
+      this.registerNonLibrarian(member);
+    }
+  }
+
+  private registerLibrarian(librarian: Librarian) {
+    if (this.librarians.includes(librarian)) throw new LibraryError("failed to register member. member is already a librarian");
+    this.librarians.push(librarian);
+  }
+
+  private registerNonLibrarian(nonLibrarian: Member) {
+    if (this.members.includes(nonLibrarian)) throw new LibraryError("failed to register member. member already exists");
+    this.members.push(nonLibrarian);
   }
 
   getAvailableBooks(): Book[] {
