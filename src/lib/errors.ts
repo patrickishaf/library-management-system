@@ -1,1 +1,1 @@
-export class BookAdditionError extends Error {}
+export class LibraryError extends Error {}

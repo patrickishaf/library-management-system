@@ -1,6 +1,6 @@
 import { Optional } from "../common";
 import { Book } from "./book";
-import { BookAdditionError } from "./errors";
+import { LibraryError } from "./errors";
 import { Librarian } from "./librarian";
 import { Library } from "./library";
 import { Member } from "./member";
@@ -39,11 +39,14 @@ export default class HistoryLibrary extends Library {
     if (this.isOpen) {
       this.books.push(book);
     } else {
-      throw new BookAdditionError("can not add new book. library closed");
+      throw new LibraryError("can not add new book. library closed");
     }
   }
 
-  removeBook(book: Book): void {
+  removeBook(isbn: string): void {
+    const existingBook = this.books.find(b => b.isbn === isbn);
+    if (!existingBook) throw new LibraryError("can not remove book. book not found in library");
+    if (!existingBook.isAvailable) throw new LibraryError("can not remove book. book has been borrowed");
     throw new Error("Method not implemented.");
   }
 

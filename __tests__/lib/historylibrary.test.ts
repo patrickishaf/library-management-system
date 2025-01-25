@@ -3,7 +3,7 @@ import HistoryLibrary from "../../src/lib/historylibrary";
 import { v4 as uuid } from "uuid";
 import { Member } from "../../src/lib/member";
 import { Librarian } from "../../src/lib/librarian";
-import { BookAdditionError } from "../../src/lib/errors";
+import { LibraryError } from "../../src/lib/errors";
 
 describe("HistoryLibrary", () => {
   let books: Book[];
@@ -67,7 +67,50 @@ describe("HistoryLibrary", () => {
       const func = () => {
         lib.addBook(new Book("Added Title 2", "Author", isbn, true));
       }
-      expect(func).toThrow(BookAdditionError);
+      expect(func).toThrow(LibraryError);
+    });
+  });
+
+  describe("removeBook", () => {
+    let lib: HistoryLibrary;
+
+    beforeEach(() => {
+      lib = HistoryLibrary.createLibrary(books, members);
+    });
+
+    it("does not remove a book if the book is not in the library", () => {
+      const books = [
+        {title: "Title 0", author: "Author", isbn: uuid(), isAvailable: true },
+        {title: "Title 1", author: "Author", isbn: uuid(), isAvailable: true },
+        {title: "Title 2", author: "Author", isbn: uuid(), isAvailable: true },
+        {title: "Title 3", author: "Author", isbn: uuid(), isAvailable: true },
+        {title: "Title 4", author: "Author", isbn: uuid(), isAvailable: true },
+        {title: "Title 5", author: "Author", isbn: uuid(), isAvailable: true },
+        {title: "Title 6", author: "Author", isbn: uuid(), isAvailable: true },
+      ].map((b) => new Book(b.title, b.author, b.isbn, b.isAvailable));
+      
+      const lib = HistoryLibrary.createLibrary(books, members);
+      const func = () => {
+        lib.removeBook("wrong_isbn");
+      }
+      expect(func).toThrow(LibraryError);
+    });
+
+    it("does not remove a book if the book is borrowed", () => {
+      lib.open();
+      lib.addBook(new Book("Added Title 2", "Author", "isbn()", false));
+      const func = () => {
+        lib.removeBook("isbn()");
+      }
+      expect(func).toThrow(LibraryError);
+    });
+
+    it("does not remove a book if the library is closed", () => {
+      lib.close();
+      const func = () => {
+        lib.removeBook("isbn()");
+      }
+      expect(func).toThrow(LibraryError);
     });
   });
 });

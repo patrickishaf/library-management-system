@@ -20,7 +20,7 @@ export abstract class Library {
 
   abstract addBook(book: Book): void;
 
-  abstract removeBook(book: Book): void;
+  abstract removeBook(isbn: string): void;
 
   abstract findBook(isbn: string): Optional<Book>;
 
