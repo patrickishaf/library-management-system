@@ -42,6 +42,8 @@ export class BiologyLibrary extends Library {
   addBook(book: Book): void {
     if (this.isOpen) {
       this.books.push(book);
+      const set = new Set(this.books);
+      this.books = Array.from(set);
     } else {
       throw new LibraryError("can not add new book. library closed");
     }
@@ -64,16 +66,6 @@ export class BiologyLibrary extends Library {
     } else {
       this.registerNonLibrarian(member);
     }
-  }
-
-  private registerLibrarian(librarian: Librarian) {
-    if (this.librarians.includes(librarian)) throw new LibraryError("failed to register member. member is already a librarian");
-    this.librarians.push(librarian);
-  }
-
-  private registerNonLibrarian(nonLibrarian: Member) {
-    if (this.members.includes(nonLibrarian)) throw new LibraryError("failed to register member. member already exists");
-    this.members.push(nonLibrarian);
   }
 
   getAvailableBooks(): Book[] {
