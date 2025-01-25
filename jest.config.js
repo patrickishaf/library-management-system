@@ -11,5 +11,8 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(string-width|strip-ansi|ansi-regex|is-fullwidth-code-point|wrap-ansi)/)'
   ],
-  moduleFileExtensions: ['js', 'ts', 'json', 'node']
+  moduleFileExtensions: ['js', 'ts', 'json', 'node'],
+  testMatch: [
+    "**/__tests__/**/*.+(spec|test).ts",
+  ]
 };
