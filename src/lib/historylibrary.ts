@@ -77,6 +77,7 @@ export default class HistoryLibrary extends Library {
   }
 
   getAvailableBooks(): Book[] {
-    throw new Error("Method not implemented.");
+    if ((this.books.length) === 0) return this.books;
+    return this.books.filter(book => book.isAvailable);
   }
 }

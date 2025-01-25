@@ -178,6 +178,7 @@ describe("HistoryLibrary", () => {
 
       expect(lib.members.length).toBe(4);
       expect(lib.librarians.length).toBe(2);
+      expect(lib.totalMembers).toBe(6);
       
       expect(lib.members).toContain(newMember);
       expect(lib.librarians).toContain(newLibrarian);
@@ -211,6 +212,44 @@ describe("HistoryLibrary", () => {
         lib.registerMember(existingLibrarian);
       }
       expect(func).toThrow(LibraryError);
+    });
+  });
+
+  describe("getAvailableBooks", () => {
+    let lib: HistoryLibrary;
+
+    beforeEach(() => {
+      lib = HistoryLibrary.createLibrary(books, members);
+    });
+
+    it("returns all available books", () => {
+      const availableBooks = lib.getAvailableBooks();
+      expect(availableBooks.length).toBe(books.length);
+      availableBooks.forEach(book => {
+        expect(book.isAvailable).toBe(true);
+      });
+    });
+
+    it("returns only available books", () => {
+      const borrowedBook = books[0];
+      borrowedBook.isAvailable = false;
+      const availableBooks = lib.getAvailableBooks();
+      expect(availableBooks.length).toBe(books.length - 1);
+      expect(availableBooks).not.toContain(borrowedBook);
+    });
+
+    it("returns an empty array if no book is available", () => {
+      books.forEach(book => {
+        book.isAvailable = false;
+      });
+      const availableBooks = lib.getAvailableBooks();
+      expect(availableBooks.length).toBe(0);
+    });
+
+    it("returns an empty array if books array is empty", () => {
+      lib.books = [];
+      const availableBooks = lib.getAvailableBooks();
+      expect(availableBooks.length).toBe(0);
     });
   });
 });
