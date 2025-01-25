@@ -21,6 +21,6 @@ export const handleRejections = () => {
 
 export const handleExpressErrors = (app: express.Express) => {
   app.use((err, req, res, next) => {
-    res.status(500).json(createErrorResponse(err));
+    res.status(500).json(err);
   })
 }
