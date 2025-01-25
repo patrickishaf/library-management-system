@@ -1,4 +1,4 @@
-import { bootstrapApplication } from "server";
+import { bootstrapApplication } from "./server";
 
 async function main() {
   try {

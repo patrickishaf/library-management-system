@@ -29,8 +29,8 @@ export const getConfig = () => {
     port: process.env.PORT ?? "3000",
     nodeEnv: (process.env.NODE_ENV ?? "production") as NodeEnv,
     dbHost: process.env.DB_HOST!,
-    dbName: process.env.dbName!,
-    dbPassword: process.env.dbPassword!,
+    dbName: process.env.DB_PASS!,
+    dbPassword: process.env.DB_PASS!,
     dbUser: process.env.DB_USER!,
   }
   console.log({ config });
